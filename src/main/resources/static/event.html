@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <ol reversed></ol>
+    
+    <script>
+        const eventSource = new EventSource('/create-event-stream-by-user-id?userId=foobar')
+        console.log(eventSource)
+        
+        eventSource.onopen = (e) => {
+            console.log('<< onopen', e);
+        };
+        
+        eventSource.onerror = (e) => {
+            console.log('<< onerror', e);
+        };
+        
+        eventSource.addEventListener("connect", (event) => {
+            console.log('<< connect', event)
+        });
+        
+        eventSource.addEventListener("sse", (event) => {
+            console.log('<< sse', event.data)
+            const newElement = document.createElement("li");
+            newElement.textContent = event.data;
+            document.querySelector("ol").prepend(newElement);
+        });
+    </script>
+</body>
+
+</html>
